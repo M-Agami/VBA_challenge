@@ -30,39 +30,38 @@ Dim Yearly_Change As Double
 Dim Percent_Change As Double
 Dim Total As Double
     Total = 0
-Dim starting_row As Double
-    starting_row = 2
+Dim Starting_row As Double
+    Starting_row = 2
        
 Dim Table_Row As Integer
     Table_Row = 2
         
-        ' last row of the sheet
+        
+       ' last row of the sheet
     Lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
         
     For i = 2 To Lastrow
             
             If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
-            Ticker_Symbol = ws.Cells(i, 1).Value
+            Ticker = ws.Cells(i, 1).Value
             ws.Range("I" & Table_Row).Value = Ticker
-            Open_price = ws.Range("C" & starting_row).Value
+            Open_price = ws.Range("C" & Starting_row).Value
             Close_price = ws.Cells(i, 6).Value
             Yearly_Change = Close_price - Open_price
             ws.Range("J" & Table_Row).Value = Yearly_Change
     
-            If Open_price = 0 Then   ' Avoid dividing by zero
+            If Open_price = 0 Then
                 Percent_Change = 0
             Else
-                Percentage_Change = Yearly_Change / Open_price
+                Percent_Change = Yearly_Change / Open_price
             End If
             
             ' format cells
             ws.Range("K" & Table_Row).NumberFormat = "0.00%"
                         
           
-            ws.Range("K" & Table_Row).Value = Percent_Change 'print
-                 
-    
-            Total = Total + ws.Cells(i, 7).Value 'add to the total value
+            ws.Range("K" & Table_Row).Value = Percent_Change
+            Total = Total + ws.Cells(i, 7).Value
             ws.Range("L" & Table_Row).Value = Total
             
             'Bonus: color code cells based on yearly change
@@ -77,14 +76,14 @@ Dim Table_Row As Integer
                 
             End If
             
-       Summary_Table_Row = Summary_Table_Row + 1
+       Table_Row = Table_Row + 1
             
             ' Update starting row and reset
-            starting_row = i + 1
-            Ticker_Total = 0
+            Starting_row = i + 1
+            Total = 0
 
         Else
-        Ticker_Total = Ticker_Total + ws.Cells(i, 7).Value
+        Total = Total + ws.Cells(i, 7).Value
         
         End If
     
@@ -94,18 +93,21 @@ Dim Table_Row As Integer
       Lastrow = ws.Cells(Rows.Count, 11).End(xlUp).Row
         
         For i = 2 To Lastrow
+        
         'greater % increase
             If ws.Range("K" & i).Value > ws.Range("Q2").Value Then
                 ws.Range("Q2").Value = ws.Range("K" & i).Value
                 ws.Range("P2").Value = ws.Range("I" & i).Value
                 
             End If
+        
         'greater % decrease
             If ws.Range("K" & i).Value < ws.Range("Q3").Value Then
                 ws.Range("Q3").Value = ws.Range("K" & i).Value
                 ws.Range("P3").Value = ws.Range("I" & i).Value
                 
             End If
+        
         'greater total vol
             If ws.Range("L" & i).Value > ws.Range("Q4").Value Then
                 ws.Range("Q4").Value = ws.Range("L" & i).Value
@@ -116,8 +118,11 @@ Dim Table_Row As Integer
             ws.Range("Q2:Q3").NumberFormat = "0.00%"
 
         Next i
+      
       'move to next sheet and restart!
     Next ws
 
 End Sub
+
+
 
